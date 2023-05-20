@@ -1,0 +1,20 @@
+{
+    "name": "Game.AssetRegistry.Editor",
+    "rootNamespace": "UnityAssetRegistry",
+    "references": [
+        "GUID:e2f00cb8d34ba8e4f9344a8e3aebc44c",
+        "GUID:b21f4b1d6baf90041aa6a65bca236026",
+        "GUID:f6b217057e3e36c4da7fb9724256424d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
