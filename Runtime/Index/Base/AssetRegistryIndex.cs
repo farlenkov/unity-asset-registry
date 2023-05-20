@@ -63,7 +63,7 @@ namespace UnityAssetRegistry
         {
             var resourcesPath = GetResourcesPath();
             var count = Guids.Count;
-            var yield_counter = 0;
+            var yieldCounter = 0;
 
             Index.Clear();
 
@@ -79,13 +79,13 @@ namespace UnityAssetRegistry
                         Log.ErrorEditor("[AssetRegistryIndex] not found ({0}) {1}/{2}", this.GetType().Name, resourcesPath, guid);
 
                     Index.Add(guid, res?.Asset);
-                    yield_counter++;
+                    yieldCounter++;
                 }
 
-                if (yield_counter == 10)
+                if (yieldCounter == 10)
                 {
                     // skip frame every 10 assets
-                    yield_counter = 0;
+                    yieldCounter = 0;
                     yield return null;
                 }
             }
@@ -155,35 +155,30 @@ namespace UnityAssetRegistry
             }
 
             var indexPath = indexPathParts[1];
-            var resources = Resources.LoadAll<REGISTRY>(indexPath);
-
-            foreach (var resource in resources)
-                if (resource.Asset == null)
-                    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(resource));
 
             // CREATE NEW & UPDATE EXISTING ASSETS
 
             var type = typeof(ASSET).Name;
-            var guids = AssetDatabase.FindAssets($"t:{type}", AssetsPath);
+            var assetGuids = AssetDatabase.FindAssets($"t:{type}", AssetsPath);
 
-            for (var i = 0; i < guids.Length; i++)
+            for (var i = 0; i < assetGuids.Length; i++)
             {
-                var uid = guids[i];
-                var path = AssetDatabase.GUIDToAssetPath(uid);
+                var assetGuid = assetGuids[i];
+                var path = AssetDatabase.GUIDToAssetPath(assetGuid);
                 var asset = (ASSET)AssetDatabase.LoadAssetAtPath(path, typeof(ASSET));
-                var res_name = $"{indexPath}/{uid}";
-                var resource = Resources.Load<REGISTRY>(res_name);
+                var resourseName = $"{indexPath}/{assetGuid}";
+                var resource = Resources.Load<REGISTRY>(resourseName);
 
-                Guids.Add(uid);
+                Guids.Add(assetGuid);
 
                 if (resource == null)
                 {
                     resource = ScriptableObject.CreateInstance<REGISTRY>();
-                    resource.name = uid;
+                    resource.name = assetGuid;
                     resource.Asset = asset;
 
                     CheckFolder(type);
-                    AssetDatabase.CreateAsset(resource, IndexPath + $"/{uid}.asset");
+                    AssetDatabase.CreateAsset(resource, IndexPath + $"/{assetGuid}.asset");
                 }
                 else
                 {
@@ -193,6 +188,19 @@ namespace UnityAssetRegistry
                         EditorUtility.SetDirty(resource);
                     }
                 }
+            }
+
+            // REMOVE OLD ASSET LINKS
+
+            var assetLinks = Resources.LoadAll<REGISTRY>(indexPath);
+
+            foreach(var assetLink in assetLinks)
+            {
+                if (Guids.Contains(assetLink.name))
+                    continue;
+
+                var assetLinkPath = AssetDatabase.GetAssetPath(assetLink);
+                AssetDatabase.DeleteAsset(assetLinkPath);
             }
         }
 

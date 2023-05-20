@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityUtility;
 
@@ -7,7 +8,10 @@ namespace UnityAssetRegistry
     public class AssetRefEditor<ASSET> : PropertyDrawer
         where ASSET : UnityEngine.Object
     {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void OnGUI(
+            Rect position, 
+            SerializedProperty property, 
+            GUIContent label)
         {
             EditorGUI.BeginChangeCheck();
 
@@ -33,12 +37,17 @@ namespace UnityAssetRegistry
             }
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override float GetPropertyHeight(
+            SerializedProperty property, 
+            GUIContent label)
         {
             return 16;
         }
 
-        string AssetField(string label, string guid, Rect position)
+        string AssetField(
+            string label, 
+            string guid, 
+            Rect position)
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<ASSET>(path);
