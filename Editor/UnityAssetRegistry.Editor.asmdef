@@ -1,10 +1,14 @@
 {
-    "name": "Game.AssetRegistry.Runtime",
+    "name": "UnityAssetRegistry.Editor",
     "rootNamespace": "UnityAssetRegistry",
     "references": [
-        "GUID:b21f4b1d6baf90041aa6a65bca236026"
+        "GUID:e2f00cb8d34ba8e4f9344a8e3aebc44c",
+        "GUID:b21f4b1d6baf90041aa6a65bca236026",
+        "GUID:f6b217057e3e36c4da7fb9724256424d"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
